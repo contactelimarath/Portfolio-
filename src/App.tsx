@@ -5,6 +5,7 @@ import { ShowcaseSection } from './components/ShowcaseSection.tsx';
 import { AiAssistantCard } from './components/AiAssistantCard.tsx';
 import { ContactFooter } from './components/ContactFooter.tsx';
 import { FloatingDock } from './components/FloatingDock.tsx';
+import { ScrollProgressBar } from './components/ScrollProgressBar.tsx';
 import { ThemeProvider, useTheme } from './context/ThemeContext.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 
@@ -51,6 +52,8 @@ function AppContent() {
         ? 'bg-[#07080B] text-[#F8FAFC] selection:bg-rose-500/30 selection:text-rose-200' 
         : 'bg-[#F4F6FC] text-[#0F172A] selection:bg-indigo-500/20 selection:text-indigo-900'
     }`}>
+      {/* Viewport Top Scroll Progress Indicator */}
+      <ScrollProgressBar />
       
       {/* Background Ambient Lighting (Ethereal Pastel Aura vs Nova Crimson) */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
