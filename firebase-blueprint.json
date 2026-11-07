@@ -1,0 +1,142 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile details synced from Firebase Auth",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Unique user identifier from Firebase Auth"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 256,
+          "description": "User email address"
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Display name of the user"
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 512,
+          "description": "Avatar URL of the user"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "admin"],
+          "description": "Role of the user in the system"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO timestamp of when the profile was initialized"
+        }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "ProjectInquiry": {
+      "title": "ProjectInquiry",
+      "description": "Consulting and collaboration inquiry sent to Omar El Imarath",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Unique identifier of the inquiry"
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "User UID who submitted the inquiry"
+        },
+        "userEmail": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 256,
+          "description": "Contact email of sender"
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 200,
+          "description": "Subject or title of project discussion"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 2000,
+          "description": "Detailed inquiry body"
+        },
+        "projectCategory": {
+          "type": "string",
+          "enum": ["mobile-security", "ai-development", "knox-passkey", "vpn-dns", "general"],
+          "description": "Category of project"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "reviewed", "archived"],
+          "description": "Current triage status of the inquiry"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when inquiry was submitted"
+        }
+      },
+      "required": ["id", "userId", "userEmail", "subject", "message", "projectCategory", "status"]
+    },
+    "BookmarkedProject": {
+      "title": "BookmarkedProject",
+      "description": "Bookmarked showcase project saved by an authenticated user",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Unique ID of the bookmark entry"
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Owner UID of the bookmark"
+        },
+        "projectId": {
+          "type": "string",
+          "enum": ["passkey", "vpn", "lifecycle", "edge-ai", "copilot"],
+          "description": "ID of the saved project showcase"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Optional notes or tags for this project"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when bookmarked"
+        }
+      },
+      "required": ["id", "userId", "projectId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Individual user profiles created upon authentication"
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": "ProjectInquiry",
+      "description": "Client inquiries submitted to Omar's portfolio"
+    },
+    "/bookmarks/{bookmarkId}": {
+      "schema": "BookmarkedProject",
+      "description": "Personal bookmarked projects per user"
+    }
+  }
+}

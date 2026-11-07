@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #0F172A;
+    background-color: #F5F7FC;
+  }
+  
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@keyframes orb-float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
+}
+
+@keyframes pastel-aura-glow {
+  0%, 100% {
+    box-shadow: 0 0 40px 14px rgba(167, 139, 250, 0.45), 0 0 70px 25px rgba(244, 114, 182, 0.3), 0 0 90px 35px rgba(125, 211, 252, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 55px 20px rgba(167, 139, 250, 0.65), 0 0 90px 35px rgba(244, 114, 182, 0.45), 0 0 110px 45px rgba(125, 211, 252, 0.35);
+  }
+}
+
+@keyframes crimson-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 35px 10px rgba(225, 29, 72, 0.45), 0 0 65px 20px rgba(239, 68, 68, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 55px 18px rgba(225, 29, 72, 0.7), 0 0 90px 30px rgba(239, 68, 68, 0.4);
+  }
+}
+
+@keyframes blink-visor {
+  0%, 90%, 100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+.animate-orb-float {
+  animation: orb-float 5s ease-in-out infinite;
+}
+
+.animate-pastel-glow {
+  animation: pastel-aura-glow 4s ease-in-out infinite;
+}
+
+.animate-crimson-glow {
+  animation: crimson-pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-visor-blink {
+  animation: blink-visor 4s infinite ease-in-out;
+}
+
+/* Glass card styling */
+.glass-panel-aura {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.08), 0 4px 6px -2px rgba(99, 102, 241, 0.04);
+}
+
+.glass-panel-dark {
+  background: rgba(16, 17, 23, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  box-shadow: 0 10px 30px -5px rgba(225, 29, 72, 0.15);
+}
+
+/* Custom ultra-smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #818CF8;
+}

@@ -1,0 +1,119 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all documents
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Hardened Global Primitives
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'contact.elimarath@gmail.com' &&
+        request.auth.token.email_verified == true
+      );
+    }
+
+    // Validation Blueprint for User Profiles
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'email', 'role']) &&
+        data.keys().hasOnly(['uid', 'email', 'displayName', 'photoURL', 'role', 'createdAt']) &&
+        data.uid is string && data.uid.size() <= 128 && data.uid == request.auth.uid &&
+        data.email is string && data.email.size() <= 256 &&
+        data.role in ['user', 'admin'] &&
+        (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 128)) &&
+        (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 512));
+    }
+
+    // Validation Blueprint for Inquiries
+    function isValidProjectInquiry(data) {
+      return data.keys().hasAll(['id', 'userId', 'userEmail', 'subject', 'message', 'projectCategory', 'status']) &&
+        data.keys().hasOnly(['id', 'userId', 'userEmail', 'subject', 'message', 'projectCategory', 'status', 'createdAt']) &&
+        data.id is string && data.id.size() <= 128 &&
+        data.userId is string && data.userId == request.auth.uid &&
+        data.userEmail is string && data.userEmail.size() <= 256 &&
+        data.subject is string && data.subject.size() >= 3 && data.subject.size() <= 200 &&
+        data.message is string && data.message.size() >= 5 && data.message.size() <= 2000 &&
+        data.projectCategory in ['mobile-security', 'ai-development', 'knox-passkey', 'vpn-dns', 'general'] &&
+        data.status in ['pending', 'reviewed', 'archived'];
+    }
+
+    // Validation Blueprint for Bookmarks
+    function isValidBookmark(data) {
+      return data.keys().hasAll(['id', 'userId', 'projectId']) &&
+        data.keys().hasOnly(['id', 'userId', 'projectId', 'notes', 'createdAt']) &&
+        data.id is string && data.id.size() <= 128 &&
+        data.userId is string && data.userId == request.auth.uid &&
+        data.projectId in ['passkey', 'vpn', 'lifecycle', 'edge-ai', 'copilot'] &&
+        (!('notes' in data) || (data.notes is string && data.notes.size() <= 500));
+    }
+
+    // User Profiles Collection: /users/{userId}
+    match /users/{userId} {
+      allow get: if isSignedIn() && (isOwner(userId) || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isSignedIn() && isValidId(userId) && userId == request.auth.uid &&
+        isValidUserProfile(incoming()) &&
+        (incoming().role == 'user' || isAdmin());
+      allow update: if isSignedIn() && isValidId(userId) && (isOwner(userId) || isAdmin()) &&
+        isValidUserProfile(incoming()) &&
+        incoming().uid == existing().uid &&
+        (isAdmin() || incoming().role == existing().role);
+      allow delete: if isAdmin();
+    }
+
+    // Inquiries Collection: /inquiries/{inquiryId}
+    match /inquiries/{inquiryId} {
+      allow get: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && isValidId(inquiryId) &&
+        isValidProjectInquiry(incoming()) &&
+        incoming().status == 'pending';
+      allow update: if isSignedIn() && isValidId(inquiryId) && (isAdmin() || resource.data.userId == request.auth.uid) &&
+        isValidProjectInquiry(incoming()) &&
+        incoming().id == existing().id &&
+        incoming().userId == existing().userId &&
+        (isAdmin() || incoming().status == existing().status);
+      allow delete: if isAdmin();
+    }
+
+    // Bookmarked Projects Collection: /bookmarks/{bookmarkId}
+    match /bookmarks/{bookmarkId} {
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(bookmarkId) &&
+        isValidBookmark(incoming());
+      allow update: if isSignedIn() && isValidId(bookmarkId) && resource.data.userId == request.auth.uid &&
+        isValidBookmark(incoming()) &&
+        incoming().id == existing().id &&
+        incoming().userId == existing().userId;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // Connection testing doc
+    match /test/connection {
+      allow read: if true;
+    }
+  }
+}

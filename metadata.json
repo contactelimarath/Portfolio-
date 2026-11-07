@@ -1,0 +1,6 @@
+{
+  "name": "Omar El Imarath Portfolio & Dashboard",
+  "description": "Executive Web Portfolio and Dashboard UI for Omar El Imarath — AI Developer & Mobile Security Specialist.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
