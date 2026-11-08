@@ -1,28 +1,24 @@
-name: NodeJS with Webpack
+name: Vite build
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+      branches: ["main"]
+        pull_request:
+            branches: ["main"]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+            jobs:
+              build:
+                  runs-on: ubuntu-latest
+                      steps:
+                            - uses: actions/checkout@v4
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
+                                  - name: Use Node.js 22
+                                          uses: actions/setup-node@v4
+                                                  with:
+                                                            node-version: 22
 
-    steps:
-    - uses: actions/checkout@v4
+                                                                  - name: Install dependencies
+                                                                          run: npm install
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Build
-      run: |
-        npm install
-        npx webpack
+                                                                                - name: Build
+                                                                                        run: npm run build
