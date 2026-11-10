@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://omarelimarath.contact-elimarath.workers.dev/sitemap.xml
