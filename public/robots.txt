@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.oeielite.dpdns.org.com/sitemap.xml
+Sitemap: https://oeielite.dpdns.org/sitemap.xml
