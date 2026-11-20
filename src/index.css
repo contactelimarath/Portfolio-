@@ -1,25 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
+  background: #08090d;
+  color: #f4f1eb;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  background: #08090d;
+}
+
 body {
   margin: 0;
   min-width: 320px;
-  background: #f4f2ed;
+  min-height: 100vh;
+  background: #08090d;
+  color: #f4f1eb;
   font-family: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
+
 button, a { -webkit-tap-highlight-color: transparent; }
 button { cursor: pointer; }
 ::selection { background: #d5f36a; color: #191a18; }
 :focus-visible { outline: 2px solid #8aa83d; outline-offset: 3px; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;
